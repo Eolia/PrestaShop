@@ -68,7 +68,11 @@
 		padding: {$table_padding};
 		border: 1px solid {$color_border};
 	}
-
+	table#carrier-tab {
+		padding: {$table_padding};
+		border: 1px solid {$color_border};
+	}
+	
 	th.product {
 		border-bottom: 1px solid {$color_border};
 	}
