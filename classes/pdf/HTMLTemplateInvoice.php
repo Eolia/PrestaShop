@@ -165,6 +165,8 @@ class HTMLTemplateInvoiceCore extends HTMLTemplate
             }
         }
 
+        $carrier = new Carrier($this->order->id_carrier);
+        
         $customer = new Customer((int)$this->order->id_customer);
 
         $order_details = $this->order_invoice->getProducts();
@@ -332,6 +334,7 @@ class HTMLTemplateInvoiceCore extends HTMLTemplate
             'ps_price_compute_precision' => _PS_PRICE_COMPUTE_PRECISION_,
             'round_type' => $round_type,
             'legal_free_text' => $legal_free_text,
+            'carrier' => $carrier
         );
 
         if (Tools::getValue('debug')) {
@@ -348,6 +351,7 @@ class HTMLTemplateInvoiceCore extends HTMLTemplate
             'tax_tab' => $this->getTaxTabContent(),
             'payment_tab' => $this->smarty->fetch($this->getTemplate('invoice.payment-tab')),
             'total_tab' => $this->smarty->fetch($this->getTemplate('invoice.total-tab')),
+			'carrier_tab' => $this->smarty->fetch($this->getTemplate('invoice.carrier-tab')),
         );
         $this->smarty->assign($tpls);
 
@@ -367,7 +371,6 @@ class HTMLTemplateInvoiceCore extends HTMLTemplate
         $tax_exempt = Configuration::get('VATNUMBER_MANAGEMENT')
                             && !empty($address->vat_number)
                             && $address->id_country != Configuration::get('VATNUMBER_COUNTRY');
-        $carrier = new Carrier($this->order->id_carrier);
 
         $tax_breakdowns = $this->getTaxBreakdown();
 
@@ -381,8 +384,7 @@ class HTMLTemplateInvoiceCore extends HTMLTemplate
             'wrapping_tax_breakdown' => $this->order_invoice->getWrappingTaxesBreakdown(),
             'tax_breakdowns' => $tax_breakdowns,
             'order' => $debug ? null : $this->order,
-            'order_invoice' => $debug ? null : $this->order_invoice,
-            'carrier' => $debug ? null : $carrier
+            'order_invoice' => $debug ? null : $this->order_invoice
         );
 
         if ($debug) {
